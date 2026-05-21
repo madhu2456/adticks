@@ -33,6 +33,7 @@ export function ProductApp() {
   const [audits, setAudits] = useState<AuditRun[]>([]);
   const [targetUrl, setTargetUrl] = useState("https://example.com");
   const [message, setMessage] = useState("Connect Google to queue real audits.");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const totalFetched = useMemo(
     () => audits.reduce((sum, audit) => sum + audit.fetched_urls, 0),
@@ -86,6 +87,26 @@ export function ProductApp() {
     setMessage(`${audit.target_url} queued for Celery processing.`);
   }
 
+  async function logout() {
+    setIsLoggingOut(true);
+    try {
+      await fetch(authUrls.logout, {
+        method: "POST",
+        credentials: "include",
+      });
+    } finally {
+      setAudits([]);
+      setAuthState({ status: "anonymous" });
+      setMessage("Connect Google to queue real audits.");
+      setIsLoggingOut(false);
+
+      const { hostname, origin, protocol } = window.location;
+      window.location.href = hostname.startsWith("app.")
+        ? `${protocol}//${hostname.replace(/^app\./, "")}`
+        : origin;
+    }
+  }
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -128,7 +149,17 @@ export function ProductApp() {
           </div>
           <div className="toolbar">
             {authState.status === "authenticated" ? (
-              <span className="identity-pill">{authState.user.email}</span>
+              <>
+                <span className="identity-pill">{authState.user.email}</span>
+                <button
+                  className="button secondary"
+                  disabled={isLoggingOut}
+                  onClick={logout}
+                  type="button"
+                >
+                  {isLoggingOut ? "Signing out..." : "Logout"}
+                </button>
+              </>
             ) : (
               <a className="button primary" href={getGoogleLoginUrl()}>
                 {authState.status === "loading" ? "Checking session..." : "Continue with Google"}
