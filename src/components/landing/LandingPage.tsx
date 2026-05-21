@@ -1,21 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
+import { APP_BASE_URL } from "@/lib/config";
 import { AuditEngineVisual } from "./AuditEngineVisual";
 import { HeroMeasurement } from "./HeroMeasurement";
 import { VisibilityLab } from "./VisibilityLab";
 
 const proofSignals = [
-  ["AI visibility ledger", "Mentions, citations, AI share of voice, prompt coverage, and competitor presence in one timeline."],
-  ["Crawler access map", "GPTBot, ChatGPT-User, PerplexityBot, ClaudeBot, Googlebot, and blocked asset paths checked together."],
-  ["Render truth", "Raw HTML, rendered DOM, hydration errors, delayed content, and JavaScript SEO risks compared side by side."],
-  ["Authority graph", "Internal PageRank flow, orphan pockets, hub strength, anchor context, and crawl-depth drag."],
+  ["SEO visibility", "Track rankings, snippets, topic movement, CTR gaps, and competitor gains."],
+  ["AI search visibility", "Measure citations and mentions across AI Overviews, ChatGPT, Perplexity, and Gemini."],
+  ["Website health", "Audit crawlability, indexability, rendering, CWV, structured data, and broken paths."],
+  ["Content intelligence", "Find entity gaps, weak answer blocks, cannibalized pages, and topical authority gaps."],
 ];
 
 const comparisonRows = [
-  ["Traditional audit", "One-time issue list", "Adticks", "Continuous visibility instrumentation"],
-  ["Rank tracker", "Keyword movement only", "Adticks", "SEO keywords, AI prompts, citations, crawl, render, and authority movement"],
-  ["Crawler export", "Rows of defects", "Adticks", "Evidence mapped to growth risk and owner-ready actions"],
-  ["AI visibility tool", "Mentions without root cause", "Adticks", "AI presence tied to content, entities, crawlers, rendering, and technical access"],
+  ["Rank tracker", "Shows keyword movement after it happens", "Adticks", "Connects ranking, AI, crawl, content, and competitor evidence"],
+  ["Crawler export", "Ships long issue lists", "Adticks", "Groups fixes by impact, affected pages, confidence, and owner"],
+  ["AI mention tracker", "Counts mentions without root cause", "Adticks", "Explains why models cite, skip, summarize, or misunderstand pages"],
 ];
 
 const demandClusters = [
@@ -49,10 +49,10 @@ const aiCoverageRows = [
 ];
 
 const navItems = [
-  ["AI Visibility", "Prompts + citations", "#measure"],
-  ["Audit Engine", "Crawl + render", "#engine"],
-  ["Keyword Map", "Demand clusters", "#demand"],
-  ["Teams", "Operator views", "#teams"],
+  ["Tools", "SEO + AI", "#tools"],
+  ["AI Visibility", "Prompts", "#measure"],
+  ["Site Audit", "Crawl + render", "#engine"],
+  ["Use Cases", "Teams", "#teams"],
 ];
 
 const visibilitySurfaces = [
@@ -87,12 +87,12 @@ const teamViews = [
 
 export function LandingPage() {
   return (
-    <div className="site research-grade v3-site">
-      <header className="market-nav v3-nav">
+    <div className="site sem-site">
+      <header className="sem-nav">
         <Link className="market-logo" href="/" aria-label="Adticks home">
           <Image src="/adticks_logo.png" alt="Adticks" width={188} height={52} priority />
         </Link>
-        <nav className="v3-nav-links" aria-label="Adticks">
+        <nav className="sem-nav-links" aria-label="Adticks">
           {navItems.map(([label, detail, href]) => (
             <a href={href} key={label}>
               <span>{label}</span>
@@ -101,10 +101,9 @@ export function LandingPage() {
           ))}
         </nav>
         <div className="market-actions">
-          <span className="v3-nav-status">Visibility OS</span>
-          <a className="button primary v3-nav-cta" href="#domain-input">
-            <span className="v3-nav-cta-desktop">Start measuring</span>
-            <span className="v3-nav-cta-mobile">Start</span>
+          <span className="sem-nav-badge">Measurement platform</span>
+          <a className="button primary sem-nav-cta" href={APP_BASE_URL}>
+            Start measuring
           </a>
         </div>
       </header>
@@ -112,7 +111,7 @@ export function LandingPage() {
       <main>
         <HeroMeasurement />
 
-        <section className="v3-proof-band" aria-label="Adticks product proof points">
+        <section className="sem-proof-band" aria-label="Adticks product proof points">
           {proofSignals.map(([title, copy]) => (
             <article key={title}>
               <h2>{title}</h2>
@@ -121,12 +120,39 @@ export function LandingPage() {
           ))}
         </section>
 
-        <section className="v3-narrative">
-          <div>
-            <span className="v3-kicker">Why the old SEO stack is not enough</span>
-            <h2>Search is now a distributed visibility system across rankings, answers, agents, and crawlers.</h2>
+        <section className="sem-tools-section" id="tools">
+          <div className="sem-section-head">
+            <span className="sem-kicker">One platform, multiple measurement layers</span>
+            <h2>Start with a domain. Expand into the full visibility stack.</h2>
+            <p>
+              Adticks is designed around the jobs SEO, content, agency, and growth teams
+              already run every week, but connects them to AI search and crawler evidence.
+            </p>
           </div>
-          <div className="v3-surface-map">
+          <div className="sem-tool-grid">
+            {[
+              ["Domain Overview", "Traffic, keywords, AI visibility, site health, competitors, and opportunity trend."],
+              ["Site Audit", "Robots, sitemaps, canonicals, redirects, render parity, schema, CWV, and indexability."],
+              ["AI Visibility", "Prompt coverage, AI Overview citations, ChatGPT mentions, Perplexity sources, and entity proof."],
+              ["Keyword & Prompt Map", "Search demand, buyer prompts, clusters, cannibalization, SERP features, and gaps."],
+              ["Competitor Research", "Pages, topics, backlinks, AI citations, authority flows, and content formats competitors own."],
+              ["Content Intelligence", "Entity coverage, answer clarity, FAQ quality, topical depth, semantic overlap, and briefs."],
+            ].map(([title, copy], index) => (
+              <article className="sem-tool-card" key={title}>
+                <strong>{String(index + 1).padStart(2, "0")}</strong>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="sem-narrative">
+          <div>
+            <span className="sem-kicker">Why the old SEO stack is not enough</span>
+            <h2>Search visibility now lives across rankings, answers, agents, and crawlers.</h2>
+          </div>
+          <div className="sem-surface-map">
             <p>
               Buyers no longer discover brands through one blue-link journey. They compare options
               in AI Overviews, ChatGPT, Perplexity, Gemini, Reddit, YouTube, search results, and
@@ -148,8 +174,8 @@ export function LandingPage() {
         </section>
 
         <section className="v3-section v3-demand" id="demand">
-          <div className="v3-section-head">
-            <span className="v3-kicker">Keyword and AI prompt map</span>
+          <div className="sem-section-head">
+            <span className="sem-kicker">Keyword and AI prompt map</span>
             <h2>Built around the searches modern SEO buyers are already making.</h2>
             <p>
               Adticks targets the new demand layer: AI visibility tracking, GEO, AEO,
@@ -193,8 +219,8 @@ export function LandingPage() {
         </section>
 
         <section className="v3-section" id="measure">
-          <div className="v3-section-head">
-            <span className="v3-kicker">Search + AI measurement layers</span>
+          <div className="sem-section-head">
+            <span className="sem-kicker">Search + AI measurement layers</span>
             <h2>Every score explains what changed, why it changed, and how to win the next citation.</h2>
             <p>
               The product is designed around evidence. Every card links a measurable signal to
@@ -206,8 +232,8 @@ export function LandingPage() {
         </section>
 
         <section className="v3-engine" id="engine">
-          <div className="v3-section-head left">
-            <span className="v3-kicker">Deep dive audit engine</span>
+          <div className="v3-section-head left sem-sticky-card">
+            <span className="sem-kicker">Deep dive audit engine</span>
             <h2>Watch crawl, render, extraction, and prioritization become one evidence loop.</h2>
             <p>
               Move through the engine stages to see how Adticks turns messy websites into
@@ -219,8 +245,8 @@ export function LandingPage() {
         </section>
 
         <section className="v3-advantage" id="advantage">
-          <div className="v3-section-head">
-            <span className="v3-kicker">Platform advantage</span>
+          <div className="sem-section-head">
+            <span className="sem-kicker">Platform advantage</span>
             <h2>Not another report. A visibility measurement layer.</h2>
           </div>
           <div className="v3-comparison">
@@ -241,9 +267,9 @@ export function LandingPage() {
         </section>
 
         <section className="v3-section" id="teams">
-          <div className="v3-section-head">
-            <span className="v3-kicker">Designed for operators</span>
-            <h2>The same crawl becomes different evidence for every team.</h2>
+          <div className="sem-section-head">
+            <span className="sem-kicker">Designed for operators</span>
+            <h2>The same measurement becomes different evidence for every team.</h2>
           </div>
           <div className="v3-team-grid">
             {teamViews.map(({ badge, label, view }) => (
@@ -258,17 +284,17 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="v3-final">
+        <section className="sem-final">
           <div>
-            <span className="v3-kicker">Start measuring</span>
-            <h2>Find the visibility leaks your competitors are not instrumenting yet.</h2>
+            <span className="sem-kicker">Start measuring</span>
+            <h2>Find the visibility gaps your competitors are winning from.</h2>
             <p>
               Start with a domain-level measurement, then expand into AI visibility tracking,
               crawl intelligence, content quality scoring, internal authority, and competitive movement.
             </p>
           </div>
-          <a className="button primary large" href="#domain-input">
-            Build my visibility map
+          <a className="button primary large" href={APP_BASE_URL}>
+            Start measuring
           </a>
         </section>
       </main>
