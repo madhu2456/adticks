@@ -2,8 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { CSSProperties } from "react";
-import Link from "next/link";
-import { authUrls } from "@/lib/config";
+import { AuthAwareGoogleCta } from "@/components/auth/AuthAwareGoogleCta";
 
 type BarStyle = CSSProperties & { "--bar": string };
 
@@ -114,12 +113,7 @@ export function HeroMeasurement() {
         </form>
 
         <div className="v3-hero-actions">
-          <a className="button primary large" href={authUrls.googleLogin}>
-            Continue with Google
-          </a>
-          <Link className="button ghost large" href="/app">
-            Open console
-          </Link>
+          <AuthAwareGoogleCta className="button primary large" />
         </div>
 
         <div className="v3-query-strip" aria-label="Primary search demand Adticks measures">

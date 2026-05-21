@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user
+from app.api.deps import get_current_user, get_optional_current_user
 from app.core.config import get_settings
 from app.db.session import get_db
 from app.models.user import User
@@ -16,7 +16,12 @@ settings = get_settings()
 
 
 @router.get("/google/login")
-async def google_login(request: Request):
+async def google_login(
+    request: Request,
+    current_user: User | None = Depends(get_optional_current_user),
+):
+    if current_user:
+        return RedirectResponse(url=f"{settings.frontend_public_url}/app")
     if not settings.google_client_id or not settings.google_client_secret:
         raise HTTPException(status_code=503, detail="Google OAuth is not configured")
     return await oauth.google.authorize_redirect(request, settings.google_redirect_uri)

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { authUrls } from "@/lib/config";
 import { AuditEngineVisual } from "./AuditEngineVisual";
 import { HeroMeasurement } from "./HeroMeasurement";
 import { VisibilityLab } from "./VisibilityLab";
@@ -103,10 +102,7 @@ export function LandingPage() {
         </nav>
         <div className="market-actions">
           <span className="v3-nav-status">Visibility OS</span>
-          <Link className="nav-link" href="/login">
-            Log in
-          </Link>
-          <a className="button primary v3-nav-cta" href={authUrls.googleLogin}>
+          <a className="button primary v3-nav-cta" href="#domain-input">
             <span className="v3-nav-cta-desktop">Start measuring</span>
             <span className="v3-nav-cta-mobile">Start</span>
           </a>
@@ -271,7 +267,7 @@ export function LandingPage() {
               crawl intelligence, content quality scoring, internal authority, and competitive movement.
             </p>
           </div>
-          <a className="button primary large" href={authUrls.googleLogin}>
+          <a className="button primary large" href="#domain-input">
             Build my visibility map
           </a>
         </section>

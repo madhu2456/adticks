@@ -13,14 +13,23 @@ def get_current_user(
     session_token: str | None = Cookie(default=None, alias=settings.session_cookie_name),
     db: Session = Depends(get_db),
 ) -> User:
-    if not session_token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+    user = get_optional_current_user(session_token=session_token, db=db)
+    if user:
+        return user
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
+
+def get_optional_current_user(
+    session_token: str | None = Cookie(default=None, alias=settings.session_cookie_name),
+    db: Session = Depends(get_db),
+) -> User | None:
+    if not session_token:
+        return None
     user_id = read_session_token(session_token)
     if not user_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid session")
+        return None
 
     user = db.get(User, user_id)
     if not user or not user.is_active:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Inactive user")
+        return None
     return user

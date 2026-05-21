@@ -479,35 +479,6 @@ h3 {
   max-width: 760px;
 }
 
-.login-screen {
-  align-items: center;
-  background: var(--adticks-surface-muted);
-  display: grid;
-  min-height: 100vh;
-  padding: 24px;
-}
-
-.login-panel {
-  background: #fff;
-  border: 1px solid var(--adticks-border);
-  border-radius: 8px;
-  box-shadow: 0 24px 80px rgb(15 33 58 / 12%);
-  display: grid;
-  gap: 22px;
-  justify-self: center;
-  max-width: 480px;
-  padding: 34px;
-  width: 100%;
-}
-
-.login-panel img {
-  background: transparent;
-  border-radius: 8px;
-  height: auto;
-  padding: 0;
-  width: 190px;
-}
-
 .identity-pill {
   background: var(--adticks-brand-50);
   border: 1px solid var(--adticks-brand-200);

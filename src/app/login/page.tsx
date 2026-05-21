@@ -1,5 +1,6 @@
-import { LoginPage } from "@/components/landing/LoginPage";
+import { redirect } from "next/navigation";
+import { authUrls } from "@/lib/config";
 
 export default function Login() {
-  return <LoginPage />;
+  redirect(authUrls.googleLogin);
 }

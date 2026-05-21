@@ -131,7 +131,7 @@ export function ProductApp() {
               <span className="identity-pill">{authState.user.email}</span>
             ) : (
               <a className="button primary" href={authUrls.googleLogin}>
-                Sign in with Google
+                {authState.status === "loading" ? "Checking session..." : "Continue with Google"}
               </a>
             )}
           </div>
