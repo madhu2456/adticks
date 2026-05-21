@@ -101,9 +101,13 @@ jobs:
             cd "$APP_DIR"
 
             echo "Fetching latest main"
-            git remote set-url origin "$REPO_URL"
+            if git remote get-url origin >/dev/null 2>&1; then
+              git remote set-url origin "$REPO_URL"
+            else
+              git remote add origin "$REPO_URL"
+            fi
             git fetch --prune origin
-            git checkout main
+            git checkout -B main origin/main
             git reset --hard origin/main
 
             echo "Building and restarting production containers"
