@@ -110,6 +110,13 @@ jobs:
             git checkout -B main origin/main
             git reset --hard origin/main
 
+            if [ ! -f .env ]; then
+              echo "ERROR: Missing $APP_DIR/.env"
+              echo "Create the production env file on the server before deploying."
+              exit 1
+            fi
+            chmod 600 .env
+
             echo "Building and restarting production containers"
             docker compose -f docker-compose.prod.yml build --pull
             docker compose -f docker-compose.prod.yml up -d --remove-orphans
