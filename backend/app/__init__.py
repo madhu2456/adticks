@@ -1,0 +1,1 @@
+"""Adticks backend application."""
