@@ -115,7 +115,12 @@ jobs:
               echo "Create the production env file on the server before deploying."
               exit 1
             fi
-            chmod 600 .env
+            if [ ! -r .env ]; then
+              echo "ERROR: $APP_DIR/.env exists but is not readable by the deploy user."
+              echo "Fix ownership or permissions on the server, for example: sudo chown \$USER:\$USER $APP_DIR/.env && chmod 600 $APP_DIR/.env"
+              exit 1
+            fi
+            chmod 600 .env 2>/dev/null || echo "Warning: could not chmod .env; continuing because it is readable."
 
             echo "Building and restarting production containers"
             docker compose -f docker-compose.prod.yml build --pull
