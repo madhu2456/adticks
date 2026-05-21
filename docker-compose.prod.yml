@@ -5,12 +5,14 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:?NEXT_PUBLIC_API_URL is required}
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:?NEXT_PUBLIC_APP_URL is required}
     restart: unless-stopped
     env_file:
       - path: .env
         required: false
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:?NEXT_PUBLIC_API_URL is required}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:?NEXT_PUBLIC_APP_URL is required}
     ports:
       - "127.0.0.1:3100:3000"
     depends_on:
@@ -31,7 +33,10 @@ services:
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://redis:6379/2}
       BACKEND_PUBLIC_URL: ${BACKEND_PUBLIC_URL:?BACKEND_PUBLIC_URL is required}
       FRONTEND_PUBLIC_URL: ${FRONTEND_PUBLIC_URL:?FRONTEND_PUBLIC_URL is required}
+      FRONTEND_MARKETING_URL: ${FRONTEND_MARKETING_URL:-https://adticks.com}
+      FRONTEND_APP_ORIGINS: ${FRONTEND_APP_ORIGINS:-${FRONTEND_PUBLIC_URL}}
       APP_SECRET_KEY: ${APP_SECRET_KEY:?APP_SECRET_KEY is required}
+      SESSION_COOKIE_DOMAIN: ${SESSION_COOKIE_DOMAIN:-}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       GOOGLE_OAUTH_REDIRECT_PATH: ${GOOGLE_OAUTH_REDIRECT_PATH:-/api/v1/auth/google/callback}

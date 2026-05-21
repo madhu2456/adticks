@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { AuthAwareGoogleCta } from "@/components/auth/AuthAwareGoogleCta";
+import { APP_BASE_URL } from "@/lib/config";
 
 type BarStyle = CSSProperties & { "--bar": string };
 
@@ -96,7 +97,7 @@ export function HeroMeasurement() {
           ))}
         </div>
 
-        <form className="v3-domain-console" action="/app">
+        <form className="v3-domain-console" action={APP_BASE_URL}>
           <label htmlFor="domain-input">Measure a domain</label>
           <div>
             <input

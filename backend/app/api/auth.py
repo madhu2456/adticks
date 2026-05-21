@@ -18,12 +18,15 @@ settings = get_settings()
 @router.get("/google/login")
 async def google_login(
     request: Request,
+    return_to: str | None = None,
     current_user: User | None = Depends(get_optional_current_user),
 ):
+    redirect_target = settings.safe_auth_return_url(return_to)
     if current_user:
-        return RedirectResponse(url=f"{settings.frontend_public_url}/app")
+        return RedirectResponse(url=redirect_target)
     if not settings.google_client_id or not settings.google_client_secret:
         raise HTTPException(status_code=503, detail="Google OAuth is not configured")
+    request.session["auth_return_to"] = redirect_target
     return await oauth.google.authorize_redirect(request, settings.google_redirect_uri)
 
 
@@ -55,7 +58,8 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
 
-    response = RedirectResponse(url=f"{settings.frontend_public_url}/app")
+    redirect_target = settings.safe_auth_return_url(request.session.pop("auth_return_to", None))
+    response = RedirectResponse(url=redirect_target)
     response.set_cookie(
         key=settings.session_cookie_name,
         value=create_session_token(user.id),
@@ -63,6 +67,7 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
         secure=settings.environment == "production",
         samesite="lax",
         max_age=settings.session_max_age_seconds,
+        domain=settings.session_cookie_domain_value,
     )
     return response
 
@@ -79,5 +84,8 @@ def me(current_user: User = Depends(get_current_user)):
 
 @router.post("/logout")
 def logout(response: Response):
-    response.delete_cookie(settings.session_cookie_name)
+    response.delete_cookie(
+        settings.session_cookie_name,
+        domain=settings.session_cookie_domain_value,
+    )
     return {"ok": True}

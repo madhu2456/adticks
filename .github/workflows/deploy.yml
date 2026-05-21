@@ -54,11 +54,15 @@ jobs:
         run: |
           cat > .env <<'EOF'
           NEXT_PUBLIC_API_URL=https://adticks.com/api/v1
+          NEXT_PUBLIC_APP_URL=https://app.adticks.com
           BACKEND_PUBLIC_URL=https://adticks.com
-          FRONTEND_PUBLIC_URL=https://adticks.com
+          FRONTEND_PUBLIC_URL=https://app.adticks.com
+          FRONTEND_MARKETING_URL=https://adticks.com
+          FRONTEND_APP_ORIGINS=https://app.adticks.com
           APP_SECRET_KEY=ci-only-compose-validation-secret
           DATABASE_URL=postgresql+psycopg://adticks:ci-password@postgres:5432/adticks
           POSTGRES_PASSWORD=ci-password
+          SESSION_COOKIE_DOMAIN=.adticks.com
           EOF
           docker compose -f docker-compose.prod.yml config
 

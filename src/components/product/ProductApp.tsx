@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import { authUrls } from "@/lib/config";
+import { authUrls, getGoogleLoginUrl } from "@/lib/config";
 
 type UserProfile = {
   id: string;
@@ -65,7 +65,7 @@ export function ProductApp() {
   async function createAudit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (authState.status !== "authenticated") {
-      window.location.href = authUrls.googleLogin;
+      window.location.href = getGoogleLoginUrl(window.location.origin);
       return;
     }
 
@@ -130,7 +130,7 @@ export function ProductApp() {
             {authState.status === "authenticated" ? (
               <span className="identity-pill">{authState.user.email}</span>
             ) : (
-              <a className="button primary" href={authUrls.googleLogin}>
+              <a className="button primary" href={getGoogleLoginUrl()}>
                 {authState.status === "loading" ? "Checking session..." : "Continue with Google"}
               </a>
             )}

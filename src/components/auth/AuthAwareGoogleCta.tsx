@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { authUrls } from "@/lib/config";
+import { APP_BASE_URL, authUrls, getGoogleLoginUrl } from "@/lib/config";
 
 type AuthStatus = "loading" | "authenticated" | "anonymous";
 
@@ -44,7 +44,7 @@ export function AuthAwareGoogleCta({
   const isAuthenticated = status === "authenticated";
 
   return (
-    <a className={className} href={isAuthenticated ? "/app" : authUrls.googleLogin}>
+    <a className={className} href={isAuthenticated ? APP_BASE_URL : getGoogleLoginUrl()}>
       {isAuthenticated ? signedInLabel : signedOutLabel}
     </a>
   );
