@@ -81,11 +81,27 @@ jobs:
             if [ -z "$APP_DIR" ]; then
               APP_DIR="/opt/adticks/"
             fi
+            REPO_URL="git@github.com:${{ github.repository }}.git"
 
             echo "Starting Adticks deployment in $APP_DIR"
+            mkdir -p "$APP_DIR"
+
+            if [ ! -d "$APP_DIR/.git" ]; then
+              if [ -z "$(find "$APP_DIR" -mindepth 1 -maxdepth 1 -print -quit)" ]; then
+                echo "No git checkout found. Cloning $REPO_URL into $APP_DIR"
+                git clone "$REPO_URL" "$APP_DIR"
+              else
+                echo "ERROR: $APP_DIR is not a git repository and is not empty."
+                echo "Move the existing files elsewhere or clone the repo into $APP_DIR before deploying."
+                ls -la "$APP_DIR"
+                exit 1
+              fi
+            fi
+
             cd "$APP_DIR"
 
             echo "Fetching latest main"
+            git remote set-url origin "$REPO_URL"
             git fetch --prune origin
             git checkout main
             git reset --hard origin/main
@@ -96,7 +112,7 @@ jobs:
 
             echo "Waiting for application health checks"
             for i in $(seq 1 30); do
-              if curl -fsS http://127.0.0.1:3000/api/health >/dev/null && curl -fsS http://127.0.0.1:8000/api/v1/health >/dev/null; then
+              if curl -fsS http://127.0.0.1:3100/api/health >/dev/null && curl -fsS http://127.0.0.1:8100/api/v1/health >/dev/null; then
                 echo "Application health checks passed"
                 break
               fi
@@ -122,7 +138,7 @@ jobs:
             if [ "$(id -u)" -eq 0 ] || [ -n "$SUDO" ]; then
               echo "Syncing nginx config from repo"
               $SUDO install -Dm644 nginx/nginx.conf /etc/nginx/sites-available/adticks
-              $SUDO install -Dm644 nginx/robots.txt /opt/adticks/nginx/robots.txt
+              $SUDO install -Dm644 nginx/robots.txt /var/www/adticks/robots.txt
               $SUDO ln -sfn /etc/nginx/sites-available/adticks /etc/nginx/sites-enabled/adticks
               if [ -f /etc/nginx/sites-enabled/default ]; then
                 $SUDO rm -f /etc/nginx/sites-enabled/default
